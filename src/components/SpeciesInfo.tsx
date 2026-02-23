@@ -75,17 +75,17 @@ function SpeciesInfoContent({ species }: { species: Species }) {
       </div>
 
       {/* TSS */}
-      <div className="mb-3 flex items-center gap-2">
-        <span className="text-xs text-slate-500">TSS (Ensemble)</span>
-        <span className="font-mono text-sm font-medium text-slate-900">{fmt(tss, 3)}</span>
+      <div className="mb-3">
+        <span className="text-xs font-medium text-slate-900">Model score</span>
+        <p className="mt-0.5 flex items-center gap-2">
+          <span className="text-xs text-slate-500">TSS (Ensemble)</span>
+          <span className="font-mono text-sm font-medium text-slate-900">{fmt(tss, 3)}</span>
+        </p>
       </div>
 
       {/* Modeller's comment (flag + text) */}
       <div>
-        <span className="text-xs font-medium text-slate-700">Modeller&apos;s comment</span>
-        <div className="mt-1.5 flex items-center gap-2">
-          <FlagBadge flag={species.flag} />
-        </div>
+        <span className="text-xs font-semibold text-slate-900">Modeller&apos;s comment</span>
         {species.comment && species.comment.trim() ? (
           <p className="mt-1.5 text-sm leading-relaxed text-slate-700">
             {species.comment.trim()}
@@ -93,6 +93,9 @@ function SpeciesInfoContent({ species }: { species: Species }) {
         ) : (
           <p className="mt-1.5 text-xs italic text-slate-400">No comment provided</p>
         )}
+        <div className="mt-1.5 flex items-center gap-2">
+          <FlagBadge flag={species.flag} />
+        </div>
       </div>
     </div>
   );
