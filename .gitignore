@@ -1,3 +1,5 @@
 node_modules/
 dist/
 *.tif
+.claude/
+CLAUDE.md
