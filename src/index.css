@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Custom properties — Baltic Sea palette + flag colours
+--------------------------------------------------------------------------- */
+:root {
+  --color-baltic-900: #0f1d2e;
+  --color-baltic-800: #162a42;
+  --color-baltic-700: #1e3a5f;
+  --color-baltic-600: #2a4f7a;
+  --color-baltic-500: #3a6b9f;
+  --color-baltic-400: #4a90b8;
+  --color-baltic-300: #7ab4d4;
+  --color-baltic-200: #a8d1e8;
+  --color-baltic-100: #d4e8f4;
+  --color-baltic-50:  #eef5fa;
+
+  --color-flag-red:    #DC2626;
+  --color-flag-yellow: #F59E0B;
+  --color-flag-green:  #16A34A;
+}
+
+/* ---------------------------------------------------------------------------
+   Base reset & typography
+--------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background-color: #f8fafc;
+  font-family: 'Source Sans 3', 'Source Sans Pro', system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  height: 100%;
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbar — sidebar species list (dark track)
+--------------------------------------------------------------------------- */
+.species-list-scroll::-webkit-scrollbar        { width: 6px; }
+.species-list-scroll::-webkit-scrollbar-track  { background: transparent; }
+.species-list-scroll::-webkit-scrollbar-thumb  {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 3px;
+}
+.species-list-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.30);
+}
+
+/* ---------------------------------------------------------------------------
+   Scrollbar — main content panel (light track)
+--------------------------------------------------------------------------- */
+.content-scroll::-webkit-scrollbar        { width: 8px; }
+.content-scroll::-webkit-scrollbar-track  { background: #f1f5f9; }
+.content-scroll::-webkit-scrollbar-thumb  {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+.content-scroll::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
