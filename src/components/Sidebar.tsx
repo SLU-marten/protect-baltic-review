@@ -12,9 +12,9 @@ function formatScientificName(raw: string): string {
   return raw.replace(/\./g, ' ');
 }
 
-/** Map a reviewer flag value to a Tailwind dot style class. */
-function flagDotClass(flag: FlagValue): string {
-  switch (flag) {
+/** Map a flag string to a Tailwind dot style class. */
+function flagDotClass(flag: string | null | undefined): string {
+  switch (flag?.toLowerCase().trim()) {
     case 'red':    return 'bg-[#DC2626]';
     case 'yellow': return 'bg-[#F59E0B]';
     case 'green':  return 'bg-[#16A34A]';
@@ -236,6 +236,20 @@ interface SpeciesListItemProps {
   onSelect: (species: Species) => void;
 }
 
+function FlagDot({ flag, label, tooltip, visible = true }: { flag: string | null | undefined; label: string; tooltip: string; visible?: boolean }) {
+  return (
+    <span
+      className={`flex flex-col items-center gap-0.5 ${visible ? '' : 'invisible'}`}
+      role="img"
+      aria-label={visible ? `${tooltip}: ${flag || 'not set'}` : ''}
+      title={visible ? tooltip : undefined}
+    >
+      <span className={`h-2 w-2 rounded-full ${flagDotClass(flag)}`} />
+      <span className="text-[8px] leading-none text-slate-300">{label}</span>
+    </span>
+  );
+}
+
 function SpeciesListItem({
   species,
   isSelected,
@@ -244,17 +258,16 @@ function SpeciesListItem({
   onSelect,
 }: SpeciesListItemProps) {
   const displayName = formatScientificName(species.scientific_name);
-  const dotClass = flagDotClass(reviewFlag);
-  const hasDot = hasReview;
+  const modellerFlag = species.flag?.trim() || null;
 
   return (
     <li id={`species-${species.scientific_name}`} role="option" aria-selected={isSelected}>
       <button
         type="button"
         onClick={() => onSelect(species)}
-        aria-label={`${displayName}${species.common_name ? `, ${species.common_name}` : ''}${hasReview ? (reviewFlag ? `, reviewed: ${reviewFlag}` : ', reviewed') : ''}`}
+        aria-label={`${displayName}${species.common_name ? `, ${species.common_name}` : ''}${modellerFlag ? `, modeller: ${modellerFlag}` : ''}${hasReview ? (reviewFlag ? `, reviewer: ${reviewFlag}` : ', reviewed') : ''}`}
         className={[
-          'group relative flex w-full items-start gap-2 px-3 py-2',
+          'group relative flex w-full items-center gap-2 px-3 py-2',
           'text-left transition-colors duration-100',
           'focus:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-blue-400',
           isSelected
@@ -274,14 +287,11 @@ function SpeciesListItem({
           </p>
         </div>
 
-        {/* Review flag dot */}
-        {hasDot && (
-          <span
-            className={`mt-1 h-2 w-2 flex-shrink-0 rounded-full ${dotClass}`}
-            aria-label={`Review flag: ${reviewFlag}`}
-            role="img"
-          />
-        )}
+        {/* Flag dots — fixed two-column layout so M and R always align */}
+        <div className="flex flex-shrink-0 items-start gap-1.5">
+          <FlagDot flag={modellerFlag} label="M" tooltip="Modeller's flag" visible={!!modellerFlag} />
+          <FlagDot flag={reviewFlag} label="R" tooltip="Reviewer's flag" visible={hasReview} />
+        </div>
       </button>
     </li>
   );
