@@ -58,8 +58,8 @@ function FlagButton({ value, label, description, selectedFlag, onSelect }: {
       aria-label={`${label}: ${description}`}
       onClick={() => onSelect(isSelected ? null : value)}
       className={[
-        'flex min-h-[44px] min-w-[100px] flex-1 flex-col items-center justify-center',
-        'rounded-md border-2 px-3 py-2 text-center transition-all duration-150',
+        'flex min-h-[60px] min-w-[100px] flex-1 flex-col items-center justify-center',
+        'rounded-md border-2 px-2 py-2 text-center transition-all duration-150',
         'focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1',
         'select-none cursor-pointer',
         isSelected ? styles.active : styles.idle,
@@ -223,6 +223,16 @@ export function ReviewForm() {
         </span>
       </div>
 
+      {/* Instructions */}
+      <p className="text-xs leading-relaxed text-slate-500">
+        Please mark species with an appropriate flag. Marking species with a <strong className="text-[#DC2626] font-semibold">red flag</strong> indicates
+        that based on your expert judgement, the species should be removed and therefore not included in the product delivery,
+        not published in the HELCOM Maps and Data Service, and not used in subsequent analyses in the project.
+        Marking a species with a <strong className="text-[#F59E0B] font-semibold">yellow flag</strong> indicates that the map is of sufficient quality
+        to be published but should be used with caution. Please add comments justifying your decision, particularly when
+        marking species with a red flag.
+      </p>
+
       {/* Reviewer Name */}
       <div className="flex flex-col gap-1.5">
         <label htmlFor="reviewer-name" className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-slate-500">
@@ -260,9 +270,9 @@ export function ReviewForm() {
           onKeyDown={isDisabled ? undefined : handleFlagGroupKeyDown}
           className={['flex gap-2', isDisabled ? 'pointer-events-none opacity-40' : ''].join(' ')}
         >
-          <FlagButton value="red" label="Red" description="Reject" selectedFlag={flag} onSelect={handleFlagSelect} />
-          <FlagButton value="yellow" label="Yellow" description="Needs Revision" selectedFlag={flag} onSelect={handleFlagSelect} />
-          <FlagButton value="green" label="Green" description="Approve" selectedFlag={flag} onSelect={handleFlagSelect} />
+          <FlagButton value="red" label="Red" description="Remove species (map highly inaccurate)" selectedFlag={flag} onSelect={handleFlagSelect} />
+          <FlagButton value="yellow" label="Yellow" description="Keep species (but flag as somewhat inaccurate)" selectedFlag={flag} onSelect={handleFlagSelect} />
+          <FlagButton value="green" label="Green" description="Keep species (map is sufficiently accurate)" selectedFlag={flag} onSelect={handleFlagSelect} />
         </div>
         {isDisabled && (
           <p className="text-[11px] text-slate-400">Select a species to enable the review form.</p>
