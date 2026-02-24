@@ -20,9 +20,9 @@ interface AppState {
   // ---- Reviewer identity (persisted) --------------------------------------
   reviewerName: string;
 
-  // ---- Reviews (session-only, NOT persisted) --------------------------------
+  // ---- Reviews (persisted to localStorage) -----------------------------------
   // Keyed by "{category}:{scientific_name}" for unambiguous lookup across
-  // the full catalogue.  Used only for sidebar flag dots during the session.
+  // the full catalogue.  Sidebar flag dots survive page reloads.
   reviews: Record<string, Review>;
 
   // ---- Actions ------------------------------------------------------------
@@ -33,6 +33,7 @@ interface AppState {
   saveReview: (category: Category, scientificName: string, review: Omit<Review, 'timestamp'>) => void;
   getReview: (category: Category, scientificName: string) => Review | undefined;
   getReviewFlag: (category: Category, scientificName: string) => FlagValue;
+  getHasReview: (category: Category, scientificName: string) => boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -135,6 +136,12 @@ export const useAppStore = create<AppState>()(
         return review?.flag ?? null;
       },
 
+      // ---- getHasReview -------------------------------------------------
+      // Returns true if any review record exists for this species.
+      getHasReview: (category: Category, scientificName: string): boolean => {
+        return reviewKey(category, scientificName) in get().reviews;
+      },
+
     }),
 
     // ---- Persistence config -----------------------------------------------
@@ -147,6 +154,7 @@ export const useAppStore = create<AppState>()(
       partialize: (state) => ({
         reviewerName: state.reviewerName,
         activeCategory: state.activeCategory,
+        reviews: state.reviews,
       }),
     },
   ),

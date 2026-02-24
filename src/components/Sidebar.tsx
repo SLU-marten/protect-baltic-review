@@ -12,13 +12,13 @@ function formatScientificName(raw: string): string {
   return raw.replace(/\./g, ' ');
 }
 
-/** Map a reviewer flag value to a Tailwind background colour class. */
+/** Map a reviewer flag value to a Tailwind dot style class. */
 function flagDotClass(flag: FlagValue): string {
   switch (flag) {
     case 'red':    return 'bg-[#DC2626]';
     case 'yellow': return 'bg-[#F59E0B]';
     case 'green':  return 'bg-[#16A34A]';
-    default:       return '';
+    default:       return 'bg-white border border-slate-400';
   }
 }
 
@@ -232,6 +232,7 @@ interface SpeciesListItemProps {
   species: Species;
   isSelected: boolean;
   reviewFlag: FlagValue;
+  hasReview: boolean;
   onSelect: (species: Species) => void;
 }
 
@@ -239,18 +240,19 @@ function SpeciesListItem({
   species,
   isSelected,
   reviewFlag,
+  hasReview,
   onSelect,
 }: SpeciesListItemProps) {
   const displayName = formatScientificName(species.scientific_name);
   const dotClass = flagDotClass(reviewFlag);
-  const hasDot = reviewFlag !== null;
+  const hasDot = hasReview;
 
   return (
     <li id={`species-${species.scientific_name}`} role="option" aria-selected={isSelected}>
       <button
         type="button"
         onClick={() => onSelect(species)}
-        aria-label={`${displayName}${species.common_name ? `, ${species.common_name}` : ''}${reviewFlag ? `, reviewed: ${reviewFlag}` : ''}`}
+        aria-label={`${displayName}${species.common_name ? `, ${species.common_name}` : ''}${hasReview ? (reviewFlag ? `, reviewed: ${reviewFlag}` : ', reviewed') : ''}`}
         className={[
           'group relative flex w-full items-start gap-2 px-3 py-2',
           'text-left transition-colors duration-100',
@@ -296,6 +298,7 @@ export function Sidebar() {
   const setSelectedSpecies = useAppStore((s) => s.setSelectedSpecies);
   const categories        = useAppStore((s) => s.categories);
   const getReviewFlag     = useAppStore((s) => s.getReviewFlag);
+  const getHasReview      = useAppStore((s) => s.getHasReview);
 
   const [query, setQuery] = useState('');
 
@@ -408,6 +411,7 @@ export function Sidebar() {
               const isSelected =
                 selectedSpecies?.scientific_name === species.scientific_name;
               const reviewFlag = getReviewFlag(activeCategory, species.scientific_name);
+              const hasReview = getHasReview(activeCategory, species.scientific_name);
 
               return (
                 <SpeciesListItem
@@ -415,6 +419,7 @@ export function Sidebar() {
                   species={species}
                   isSelected={isSelected}
                   reviewFlag={reviewFlag}
+                  hasReview={hasReview}
                   onSelect={setSelectedSpecies}
                 />
               );
