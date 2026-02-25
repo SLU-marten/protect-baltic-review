@@ -7,63 +7,75 @@ How to structure your habitat model data for the review platform.
 ```
 public/data/
 ├── fish/
-│   ├── fish_details.csv                # One CSV with ALL fish species info
-│   ├── binary_confidence_tif/          # One .tif per species
-│   │   ├── Gadus_morhua.tif
-│   │   ├── Clupea_harengus.tif
-│   │   └── ...
-│   └── binary_confidence_pdf/          # One .pdf per species (same maps)
-│       ├── Gadus_morhua.pdf
-│       ├── Clupea_harengus.pdf
-│       └── ...
+│   ├── gadus-morhua/
+│   │   ├── map.tif            # Habitat probability map (GeoTIFF)
+│   │   └── metadata.csv       # Model information
+│   ├── clupea-harengus/
+│   │   ├── map.pdf            # Alternative: PDF map
+│   │   └── metadata.csv
+│   └── ...
 ├── invertebrates/
-│   ├── invertebrates_details.csv
-│   ├── binary_confidence_tif/
-│   │   └── ...
-│   └── binary_confidence_pdf/
-│       └── ...
+│   ├── saduria-entomon/
+│   │   ├── map.tif
+│   │   └── metadata.csv
+│   └── ...
 └── macrophytes/
-    ├── macrophytes_details.csv
-    ├── binary_confidence_tif/
-    │   └── ...
-    └── binary_confidence_pdf/
-        └── ...
+    ├── fucus-vesiculosus/
+    │   ├── map.tif
+    │   └── metadata.csv
+    └── ...
 ```
 
-## The Details CSV
+## Folder Naming
 
-Each category has ONE CSV file containing info about ALL species in that category.
-
-### Required Columns
-
-| Column | Type | Description |
-|--------|------|-------------|
-| `scientific_name` | string | Latin species name — **must match TIF/PDF filenames** |
-| `common_name` | string | Common/vernacular name |
-| `flag` | string | Modeller's quality flag for this model |
-| `comment` | string | Modeller's comment on model quality |
-| `mean_TSS_ensemble` | number | True Skill Statistic (model performance) |
-
-### Example: fish_details.csv
-```csv
-scientific_name,common_name,flag,comment,mean_TSS_ensemble
-Gadus morhua,Atlantic cod,good,Strong model with high observation count,0.92
-Clupea harengus,Atlantic herring,moderate,Limited winter observations,0.71
-```
+- Use **kebab-case** species names: `gadus-morhua`, not `Gadus_morhua`
+- One folder per species
+- Folder name becomes the species ID
 
 ## Map Files
 
-Each species has a map in both formats:
-- **binary_confidence_tif/**: GeoTIFF (preferred — enables georeferenced display)
-- **binary_confidence_pdf/**: PDF (fallback — displayed as zoomable image)
+Supported formats:
+- `.tif` / `.tiff` — GeoTIFF (preferred, enables georeferenced display)
+- `.pdf` — PDF map (fallback, displayed as zoomable image)
 
-Filenames should match exactly between TIF and PDF folders and correspond to the species name in the CSV.
+Name the file `map.tif` or `map.pdf`.
+
+## Metadata CSV
+
+Each species folder must contain a `metadata.csv` with model information.
+
+### Minimum Fields
+```csv
+field,value
+species_name,Gadus morhua
+common_name,Atlantic cod
+model_type,MaxEnt
+auc,0.92
+n_observations,1247
+resolution,1km
+date,2025-06-15
+```
+
+### Format
+- Two columns: `field` and `value`
+- UTF-8 encoding
+- Headers in first row
+- Additional fields are displayed automatically
+
+## Species Manifest
+
+After placing all data, run the manifest generator:
+
+```bash
+npx tsx scripts/build-manifest.ts
+```
+
+This creates `public/species-manifest.json` used by the app to index all species.
 
 ## Quick Checklist
 
-- [ ] Three category folders: `fish/`, `invertebrates/`, `macrophytes/`
-- [ ] One `*_details.csv` per category with all species as rows
-- [ ] `binary_confidence_tif/` folder with one .tif per species
-- [ ] `binary_confidence_pdf/` folder with one .pdf per species
-- [ ] Filenames consistent between CSV, TIF, and PDF
-- [ ] Place everything under `public/data/`
+- [ ] All species folders use kebab-case names
+- [ ] Each folder has exactly one map file (.tif or .pdf)
+- [ ] Each folder has a metadata.csv
+- [ ] Manifest generated successfully
+- [ ] App loads and shows all species in sidebar

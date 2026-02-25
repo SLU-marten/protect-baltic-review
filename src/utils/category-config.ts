@@ -27,7 +27,7 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     pngBasePath: `${BASE}/invertebrates/binary_confidence_png`,
     pdfBasePath: `${BASE}/invertebrates/binary_confidence_pdf`,
     tifBasePath: `${BASE}/invertebrates/binary_confidence_tif`,
-    available: false,
+    available: true,
   },
   {
     id: 'macrophytes',
@@ -36,7 +36,7 @@ export const CATEGORY_CONFIGS: CategoryConfig[] = [
     pngBasePath: `${BASE}/macrophytes/binary_confidence_png`,
     pdfBasePath: `${BASE}/macrophytes/binary_confidence_pdf`,
     tifBasePath: `${BASE}/macrophytes/binary_confidence_tif`,
-    available: false,
+    available: true,
   },
 ];
 

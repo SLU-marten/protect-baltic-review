@@ -112,14 +112,14 @@ function EmptyState() {
 // ContentHeader — species name bar above the map + info panels
 // ---------------------------------------------------------------------------
 
-function ContentHeader({ scientificName }: { scientificName: string }) {
+function ContentHeader({ displayName }: { displayName: string }) {
   return (
     <header
       className="flex flex-shrink-0 items-center border-b border-slate-200 bg-white px-6 py-3"
       aria-label="Selected species"
     >
       <h1 className="truncate text-lg font-semibold italic leading-tight text-slate-900">
-        {scientificName.replace(/\./g, ' ')}
+        {displayName}
       </h1>
     </header>
   );
@@ -182,7 +182,7 @@ export function App() {
         {selectedSpecies ? (
           <>
             {/* Top header bar with species identity */}
-            <ContentHeader scientificName={selectedSpecies.scientific_name} />
+            <ContentHeader displayName={selectedSpecies.full_name} />
 
             {/* Body — map 60% | info+form 40% */}
             <div className="flex min-h-0 flex-1 overflow-hidden">

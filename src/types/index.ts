@@ -16,7 +16,8 @@ export type FlagValue = 'red' | 'yellow' | 'green' | null;
 // ---------------------------------------------------------------------------
 export interface Species {
   // Identity
-  scientific_name: string;   // e.g. "Gadus.morhua"  (matches TIF/PDF filename)
+  scientific_name: string;   // e.g. "Gadus.morhua"  (matches TIF/PDF/PNG filename)
+  full_name: string;         // e.g. "Gadus morhua"  (display name from CSV)
   common_name: string;       // e.g. "Atlantic cod"
   short_name: string;        // abbreviated name used in model run
 

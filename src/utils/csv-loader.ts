@@ -10,6 +10,7 @@ interface RawSpeciesRow {
   flag: string;
   comment: string;
   scientific_name: string;
+  full_name: string;
   common_name: string;
   quantity: string;
   use_method_cov: string;
@@ -54,6 +55,7 @@ function sortByScientificName(species: Species[]): Species[] {
 function rowToSpecies(row: RawSpeciesRow, category: Category): Species {
   return {
     scientific_name: row.scientific_name.trim(),
+    full_name: (row.full_name ?? row.scientific_name.replace(/\./g, ' ')).trim(),
     common_name: row.common_name.trim(),
     short_name: row.short_name.trim(),
     flag: row.flag.trim(),

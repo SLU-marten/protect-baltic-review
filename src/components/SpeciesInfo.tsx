@@ -58,7 +58,7 @@ function FlagBadge({ flag }: { flag: string }) {
 
 function SpeciesInfoContent({ species }: { species: Species }) {
   const tss = species.mean_TSS_ensemble;
-  const displayName = species.scientific_name.replace(/\./g, ' ');
+  const displayName = species.full_name || species.scientific_name.replace(/\./g, ' ');
 
   return (
     <div className="p-5">

@@ -7,9 +7,9 @@ import type { Category, FlagValue, Species } from '@/types';
 // Helpers
 // ---------------------------------------------------------------------------
 
-/** Convert dot-separated scientific names to display form: "Gadus.morhua" → "Gadus morhua" */
-function formatScientificName(raw: string): string {
-  return raw.replace(/\./g, ' ');
+/** Display name — use full_name from CSV, fallback to scientific_name with dots replaced */
+function displayName(species: Species): string {
+  return species.full_name || species.scientific_name.replace(/\./g, ' ');
 }
 
 /** Map a flag string to a Tailwind dot style class. */
@@ -257,7 +257,7 @@ function SpeciesListItem({
   hasReview,
   onSelect,
 }: SpeciesListItemProps) {
-  const displayName = formatScientificName(species.scientific_name);
+  const name = displayName(species);
   const modellerFlag = species.flag?.trim() || null;
 
   return (
@@ -265,7 +265,7 @@ function SpeciesListItem({
       <button
         type="button"
         onClick={() => onSelect(species)}
-        aria-label={`${displayName}${species.common_name ? `, ${species.common_name}` : ''}${modellerFlag ? `, modeller: ${modellerFlag}` : ''}${hasReview ? (reviewFlag ? `, reviewer: ${reviewFlag}` : ', reviewed') : ''}`}
+        aria-label={`${name}${species.common_name ? `, ${species.common_name}` : ''}${modellerFlag ? `, modeller: ${modellerFlag}` : ''}${hasReview ? (reviewFlag ? `, reviewer: ${reviewFlag}` : ', reviewed') : ''}`}
         className={[
           'group relative flex w-full items-center gap-2 px-3 py-2',
           'text-left transition-colors duration-100',
@@ -283,7 +283,7 @@ function SpeciesListItem({
               isSelected ? 'text-slate-100' : 'text-slate-200',
             ].join(' ')}
           >
-            {displayName}
+            {name}
           </p>
         </div>
 
@@ -341,6 +341,7 @@ export function Sidebar() {
     const lower = query.toLowerCase();
     return allSpecies.filter(
       (s) =>
+        s.full_name.toLowerCase().includes(lower) ||
         s.scientific_name.toLowerCase().includes(lower) ||
         s.common_name.toLowerCase().includes(lower),
     );
