@@ -146,7 +146,7 @@ const LEGEND_ITEMS = [
 
 function MapLegend() {
   return (
-    <div className="absolute top-3 left-3 z-10 flex items-center gap-3 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
+    <div className="absolute top-3 left-3 z-10 flex flex-col gap-1.5 rounded-lg border border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur-sm">
       {LEGEND_ITEMS.map((item) => (
         <div key={item.label} className="flex items-center gap-1.5">
           <span
